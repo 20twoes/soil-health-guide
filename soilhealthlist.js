@@ -14,20 +14,38 @@ function renderTable(data) {
 
 
 function buildHeader() {
-    var thead = document.createElement('thead');
+    var headings = [
+        'Country',
+        'State',
+        'Farm/Ranch',
+        'Trend',
+        'Most recent SOM%'
+    ];
     var tr = document.createElement('tr');
-    var th = document.createElement('th');
-    th.textContent = 'Farm Name';
-    tr.appendChild(th);
+    for (var i=0; i < headings.length; i++) {
+        var th = document.createElement('th');
+        th.textContent = headings[i];
+        tr.appendChild(th);
+    }
+    var thead = document.createElement('thead');
     thead.appendChild(tr);
     return thead;
 }
 
 
 function buildRow(row) {
+    var fields = [
+        'gsx$country',
+        'gsx$state',
+        'gsx$farmname',
+        'gsx$trend',
+        'gsx$som',
+    ];
     var tr = document.createElement('tr');
-    var td = document.createElement('td');
-    td.textContent = row.gsx$farmname.$t;
-    tr.appendChild(td);
+    for (var i=0; i < fields.length; i++) {
+        var td = document.createElement('td');
+        td.textContent = row[fields[i]].$t;
+        tr.appendChild(td);
+    }
     return tr;
 }
