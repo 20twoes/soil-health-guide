@@ -2,6 +2,7 @@ function renderTable(data) {
     var farms = data.feed.entry;
     var container = document.getElementById('somListContainer');
     var table = document.createElement('table');
+    table.setAttribute('class', 'som-table');
     table.appendChild(buildHeader());
     var body = document.createElement('tbody');
     Array.prototype.forEach.call(farms, function(row, index, array) {
@@ -15,10 +16,10 @@ function renderTable(data) {
 
 function buildHeader() {
     var headings = [
-        'Country',
-        'State',
+        'Address',
         'Farm/Ranch',
         'Trend',
+        'Relative',
         'Most recent SOM%'
     ];
     var tr = document.createElement('tr');
@@ -33,18 +34,45 @@ function buildHeader() {
 }
 
 
+function _getRowValue(row, key) {
+    return row['gsx$' + key].$t;
+}
+
+
 function buildRow(row) {
-    var fields = [
-        'gsx$country',
-        'gsx$state',
-        'gsx$farmname',
-        'gsx$trend',
-        'gsx$som',
+    TREND_UP_CLASS = 'som-trend-up';
+    UP = 'up';
+
+    var _get = function(key) {
+        return _getRowValue(row, key);
+    };
+
+    var _isTrendData = function(colIndex) {
+        return colIndex == 2 || colIndex == 3;
+    };
+
+    var _renderArrow = function(td, value) {
+        if (value == UP) {
+            td.setAttribute('class', TREND_UP_CLASS);
+        }
+    };
+
+    var values = [
+        _get('state') + ', ' + _get('country'),
+        _get('farmname'),
+        _get('trend'),
+        _get('relative'),
+        _get('som'),
     ];
     var tr = document.createElement('tr');
-    for (var i=0; i < fields.length; i++) {
+    for (var i=0; i < values.length; i++) {
         var td = document.createElement('td');
-        td.textContent = row[fields[i]].$t;
+        var value = values[i];
+        if (_isTrendData(i)) {
+            _renderArrow(td, value);
+        } else {
+            td.textContent = value;
+        }
         tr.appendChild(td);
     }
     return tr;
