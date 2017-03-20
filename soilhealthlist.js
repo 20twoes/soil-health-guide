@@ -26,6 +26,9 @@ function buildHeader() {
     for (var i=0; i < headings.length; i++) {
         var th = document.createElement('th');
         th.textContent = headings[i];
+        if ([2, 3, 4].indexOf(i) > -1) {
+            th.setAttribute('class', 'u-center');
+        }
         tr.appendChild(th);
     }
     var thead = document.createElement('thead');
@@ -72,6 +75,9 @@ function buildRow(row) {
             _renderArrow(td, value);
         } else {
             td.textContent = value;
+        }
+        if (i == 4) {
+            td.setAttribute('class', 'u-center');
         }
         tr.appendChild(td);
     }
